@@ -26,7 +26,24 @@
       background-color: white;
     }
 
-    a {
+    a.button {
+      display: inline-block;
+      margin: 15px 10px 0 10px;
+      text-decoration: none;
+      color: white;
+      background-color: #3498db;
+      padding: 10px 25px;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    a.button:hover {
+      background-color: #2980b9;
+    }
+
+    a.download-link {
       display: inline-block;
       margin-top: 20px;
       text-decoration: none;
@@ -36,7 +53,7 @@
       border-radius: 5px;
     }
 
-    a:hover {
+    a.download-link:hover {
       background-color: #2980b9;
     }
   </style>
@@ -51,9 +68,16 @@
   <img class="qr" src="{{ url_for('static', filename='qr_codes/' + filename) }}" alt="QR Code" width="200" height="200">
 
   <p>
-    <a href="{{ url_for('static', filename='qr_codes/' + filename) }}" download="{{ name }}_qr_code.png">
+    <a href="{{ url_for('static', filename='qr_codes/' + filename) }}" download="{{ name }}_qr_code.png" class="download-link">
       ⬇ Download QR Code
     </a>
   </p>
+
+  <!-- Buttons to navigate -->
+  <div>
+    <a href="{{ url_for('home') }}" class="button">Register</a>
+    <a href="{{ url_for('scan') }}" class="button">Scanner</a>
+    <a href="{{ url_for('table') }}" class="button">Attendance Table</a>
+  </div>
 </body>
 </html>
