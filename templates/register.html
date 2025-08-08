@@ -27,6 +27,9 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.05);
       background: white;
       box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
     }
 
     h1 {
@@ -54,72 +57,43 @@
       font-size: 1rem;
     }
 
-    button {
+    button, .nav-buttons a {
       width: 100%;
       padding: 12px;
-      background-color: #4CAF50;
-      color: white;
-      font-size: 16px;
-      border: none;
       border-radius: 5px;
+      font-weight: bold;
+      font-size: 16px;
       cursor: pointer;
       margin-top: 10px;
+      box-sizing: border-box;
+      text-align: center;
+      text-decoration: none;
+      color: white;
+      border: none;
       transition: background-color 0.3s ease;
+      display: inline-block;
+    }
+
+    button {
+      background-color: #4CAF50;
     }
 
     button:hover {
       background-color: #45a049;
     }
 
-    .image-preview {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #ccc;
-      display: none;
-      margin: 10px auto;
-      display: block;
-      max-width: 80vw;
-      max-height: 80vw;
-    }
-
-    .center {
-      text-align: center;
-    }
-
-    /* Container for the two extra buttons */
     .nav-buttons {
-      margin-top: 20px;
-      text-align: center;
-      max-width: 500px;
-      width: 100%;
-      margin-left: auto;
-      margin-right: auto;
       display: flex;
-      justify-content: center;
       gap: 15px;
       flex-wrap: wrap;
-      box-sizing: border-box;
-      padding: 0 10px;
-    }
-
-    .nav-buttons a {
-      text-decoration: none;
-      color: white;
-      padding: 12px 25px;
-      border-radius: 5px;
-      font-weight: bold;
-      flex: 1 1 150px;
-      text-align: center;
-      box-sizing: border-box;
-      transition: background-color 0.3s ease;
-      font-size: 1rem;
-      min-width: 140px;
+      margin-top: 10px;
+      justify-content: center;
     }
 
     .nav-buttons a.table-btn {
       background-color: #3498db;
+      flex: 1 1 45%;
+      min-width: 140px;
     }
 
     .nav-buttons a.table-btn:hover {
@@ -128,15 +102,34 @@
 
     .nav-buttons a.scanner-btn {
       background-color: #27ae60;
+      flex: 1 1 45%;
+      min-width: 140px;
     }
 
     .nav-buttons a.scanner-btn:hover {
       background-color: #1e8449;
     }
 
+    .image-preview {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #ccc;
+      margin: 10px auto;
+      display: none;
+      max-width: 80vw;
+      max-height: 80vw;
+    }
+
+    .center {
+      text-align: center;
+    }
+
     /* Responsive styles */
     @media (max-width: 600px) {
       form {
+        max-width: 100%;
         padding: 15px;
       }
 
@@ -149,16 +142,19 @@
         font-size: 0.9rem;
       }
 
-      button {
+      button, .nav-buttons a {
         font-size: 14px;
         padding: 10px;
       }
 
-      .nav-buttons a {
+      .nav-buttons {
+        gap: 10px;
+      }
+
+      .nav-buttons a.table-btn,
+      .nav-buttons a.scanner-btn {
         flex: 1 1 100%;
         min-width: unset;
-        font-size: 1rem;
-        padding: 12px 0;
       }
 
       .image-preview {
@@ -170,12 +166,9 @@
     }
 
     @media (max-width: 360px) {
-      .nav-buttons {
-        gap: 10px;
-      }
-
-      button {
+      button, .nav-buttons a {
         font-size: 13px;
+        padding: 8px;
       }
 
       input[type="text"],
@@ -204,13 +197,13 @@
     </div>
 
     <button type="submit">Register</button>
-  </form>
 
-  <!-- Navigation Buttons -->
-  <div class="nav-buttons">
-    <a href="{{ url_for('table') }}" class="table-btn">View Attendance Table</a>
-    <a href="{{ url_for('scan') }}" class="scanner-btn">Go to Scanner</a>
-  </div>
+    <!-- Navigation Buttons inside the form -->
+    <div class="nav-buttons">
+      <a href="{{ url_for('table') }}" class="table-btn">View Attendance Table</a>
+      <a href="{{ url_for('scan') }}" class="scanner-btn">Go to Scanner</a>
+    </div>
+  </form>
 
   <script>
     function previewImage(event) {
