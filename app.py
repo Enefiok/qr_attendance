@@ -11,11 +11,11 @@ app.secret_key = 'your_secret_key'  # For flash messaging
 # ✅ PostgreSQL database connection
 def connect_db():
     return psycopg2.connect(
-        dbname="qr_attendance",
-        user="postgres",
-        password="victor123",
-        host="localhost",
-        port="5432"
+        dbname=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        host=os.getenv("DB_HOST"),
+        port=os.getenv("DB_PORT")
     )
 
 # Ensure database tables exist
@@ -274,7 +274,11 @@ def table():
     except Exception as e:
         return f"❌ Error loading table: {e}", 500
 
+# Set secret key from environment or fallback (avoid hardcoding in production)
+app.secret_key = os.getenv('SECRET_KEY', 'your_default_fallback_secret_key')
+
 # 🚀 Run Flask server
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    debug_mode = os.getenv("FLASK_DEBUG", "False").lower() in ("true", "1", "t")
+    app.run(host="0.0.0.0", port=port, debug=debug_mode)
