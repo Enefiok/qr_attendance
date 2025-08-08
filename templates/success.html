@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registration Successful</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+      background-color: #f4f4f4;
+    }
+
+    .image-circle {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #ccc;
+      margin-top: 20px;
+    }
+
+    img.qr {
+      margin-top: 20px;
+      border: 2px solid #ccc;
+      padding: 10px;
+      background-color: white;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: white;
+      background-color: #3498db;
+      padding: 10px 20px;
+      border-radius: 5px;
+    }
+
+    a:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <h1>Hi, {{ name }}</h1>
+  <p>You have been successfully registered in the <strong>{{ department }}</strong> department.</p>
+
+  <img src="{{ image_path }}" alt="Profile Photo" class="image-circle">
+
+  <p>Your QR Code:</p>
+  <img class="qr" src="{{ url_for('static', filename='qr_codes/' + filename) }}" alt="QR Code" width="200" height="200">
+
+  <p>
+    <a href="{{ url_for('static', filename='qr_codes/' + filename) }}" download="{{ name }}_qr_code.png">
+      ⬇ Download QR Code
+    </a>
+  </p>
+</body>
+</html>

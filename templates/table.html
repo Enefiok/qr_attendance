@@ -1,0 +1,116 @@
+<!DOCTYPE html> 
+<html>
+<head>
+    <title>Scanned Users Table</title>
+    <style>
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        th {
+            cursor: pointer;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            text-align: center;
+        }
+        .profile-pic {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Scanned Users</h2>
+
+<table id="usersTable">
+    <thead>
+        <tr>
+            <th onclick="sortTable(0)">Image</th>
+            <th onclick="sortTable(1)">Name</th>
+            <th onclick="sortTable(2)">Department</th>
+            <th onclick="sortTable(3)">Date</th>
+            <th onclick="sortTable(4)">Check In</th>
+            <th onclick="sortTable(5)">Check Out</th>
+            <th onclick="sortTable(6)">Day</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if records %}
+            {% for record in records %}
+            <tr>
+                <td>
+                    {% if record[3] %}
+                        <img src="{{ url_for('static', filename=record[3].replace('\\', '/').split('static/')[-1]) }}" 
+                             alt="Staff Image" class="profile-pic">
+                    {% else %}
+                        <span>—</span>
+                    {% endif %}
+                </td>
+                <td>{{ record[1] }}</td> <!-- name -->
+                <td>{{ record[2] }}</td> <!-- department -->
+                <td>{{ record[6] }}</td> <!-- date -->
+                <td>{{ record[4].strftime('%H:%M:%S') if record[4] else '—' }}</td> <!-- check_in_time -->
+                <td>{{ record[5].strftime('%H:%M:%S') if record[5] else '—' }}</td> <!-- check_out_time -->
+                <td>{{ record[7] }}</td> <!-- day_of_week -->
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="7">No attendance records found.</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+<script>
+function sortTable(n) {
+    const table = document.getElementById("usersTable");
+    let switching = true;
+    let dir = "asc";
+    let switchcount = 0;
+
+    while (switching) {
+        switching = false;
+        const rows = table.rows;
+
+        for (let i = 1; i < (rows.length - 1); i++) {
+            let shouldSwitch = false;
+            const x = rows[i].getElementsByTagName("TD")[n];
+            const y = rows[i + 1].getElementsByTagName("TD")[n];
+
+            const xContent = x?.innerText || x?.textContent || "";
+            const yContent = y?.innerText || y?.textContent || "";
+
+            if ((dir === "asc" && xContent.toLowerCase() > yContent.toLowerCase()) ||
+                (dir === "desc" && xContent.toLowerCase() < yContent.toLowerCase())) {
+                shouldSwitch = true;
+                break;
+            }
+        }
+
+        if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+            switchcount++;
+        } else {
+            if (switchcount === 0 && dir === "asc") {
+                dir = "desc";
+                switching = true;
+            }
+        }
+    }
+}
+</script>
+
+</body>
+</html>

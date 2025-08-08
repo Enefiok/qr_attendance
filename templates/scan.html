@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QR Scanner</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    #scanner-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .scanner-title {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
+      font-weight: bold;
+      z-index: 5;
+      text-shadow: 0 0 10px black;
+    }
+
+    .nav-button {
+      position: absolute;
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .nav-button:hover {
+      background-color: #0056b3;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .overlay::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 2;
+    }
+
+    .overlay::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 250px;
+      height: 250px;
+      transform: translate(-50%, -50%);
+      background: transparent;
+      box-shadow: 0 0 0 9999px rgba(0,0,0,0.6);
+      z-index: 2;
+    }
+
+    .focus-box {
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 2px dashed #00ff00;
+      box-shadow: 0 0 30px #00ff00;
+      z-index: 3;
+      background: transparent;
+      overflow: hidden;
+    }
+
+    .scan-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: red;
+      animation: moveLine 2s linear infinite;
+      z-index: 4;
+    }
+
+    @keyframes moveLine {
+      0% { top: 0; }
+      50% { top: calc(100% - 2px); }
+      100% { top: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div id="scanner-container">
+    <video id="preview"></video>
+    <div class="scanner-title">Scan your QR</div>
+    <a class="nav-button" href="/table">📊 View Attendance Table</a>
+    <div class="overlay"></div>
+    <div class="focus-box">
+      <div class="scan-line"></div>
+    </div>
+  </div>
+
+  <!-- ✅ Hidden form for QR submission -->
+  <form method="POST" action="/scan" id="scan-form" style="display: none;">
+    <input type="hidden" name="staff_id" id="staff_id">
+  </form>
+
+  <!-- 📷 Instascan QR Scanner -->
+  <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+<script>
+  let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+  scanner.addListener('scan', function (content) {
+    alert('Scanned: ' + content);
+
+    // ✅ Send scanned QR data to /mark_attendance
+    fetch('/mark_attendance', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ qr_data: content })
+    })
+    .then(res => res.json())
+    .then(data => {
+      alert(data.message); // show server message
+
+      // Optional: Redirect to table after marking attendance
+      window.location.href = "/table";
+    })
+    .catch(err => {
+      console.error(err);
+      alert("❌ Error marking attendance");
+    });
+  });
+
+  Instascan.Camera.getCameras().then(function (cameras) {
+    if (cameras.length > 0) {
+      scanner.start(cameras[0]);
+    } else {
+      alert('No cameras found.');
+    }
+  }).catch(function (e) {
+    console.error(e);
+  });
+</script>
+</body>
+</html>

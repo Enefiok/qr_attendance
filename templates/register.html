@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register Staff</title>
+  <style>
+    /* Make the body take full viewport height and center content */
+    body {
+      height: 100vh;            /* full viewport height */
+      margin: 0;                /* remove default margin */
+      display: flex;            /* flex container */
+      justify-content: center;  /* center horizontally */
+      align-items: center;      /* center vertically */
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    /* Form styling */
+    form {
+      max-width: 500px;
+      width: 100%;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      background: white;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+
+    input[type="text"],
+    input[type="file"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .image-preview {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #ccc;
+      display: none;
+      margin: 10px auto;
+      display: block;
+    }
+
+    .center {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <form method="post" action="/register" enctype="multipart/form-data">
+    <h1>Register Staff</h1>
+
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name" required>
+
+    <label for="department">Department:</label>
+    <input type="text" name="department" id="department" required>
+
+    <label for="image">Upload Image:</label>
+    <input type="file" name="image" id="image" accept="image/*" onchange="previewImage(event)" required>
+
+    <div class="center">
+      <img id="preview" class="image-preview" alt="Image Preview">
+    </div>
+
+    <button type="submit">Register</button>
+  </form>
+
+  <script>
+    function previewImage(event) {
+      const preview = document.getElementById('preview');
+      const file = event.target.files[0];
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>
