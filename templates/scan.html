@@ -34,14 +34,24 @@
       font-weight: bold;
       z-index: 5;
       text-shadow: 0 0 10px black;
+      white-space: nowrap;
     }
 
-    .nav-button {
+    /* Container for buttons */
+    .nav-buttons-container {
       position: absolute;
       top: 70px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 5;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 90vw;
+    }
+
+    .nav-button {
       background-color: #007bff;
       color: white;
       border: none;
@@ -51,6 +61,11 @@
       cursor: pointer;
       text-decoration: none;
       text-align: center;
+      white-space: nowrap;
+      flex: 1 1 auto;
+      min-width: 130px;
+      box-sizing: border-box;
+      transition: background-color 0.3s ease;
     }
 
     .nav-button:hover {
@@ -120,13 +135,66 @@
       50% { top: calc(100% - 2px); }
       100% { top: 0; }
     }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .scanner-title {
+        font-size: 18px;
+        top: 15px;
+      }
+
+      .nav-buttons-container {
+        top: 60px;
+        gap: 8px;
+      }
+
+      .nav-button {
+        font-size: 14px;
+        padding: 8px 15px;
+        min-width: 110px;
+        flex: 1 1 45%; /* two buttons per row on small screens */
+      }
+
+      .focus-box {
+        width: 180px;
+        height: 180px;
+      }
+
+      .overlay::after {
+        width: 180px;
+        height: 180px;
+      }
+    }
+
+    @media (max-width: 320px) {
+      .nav-button {
+        flex: 1 1 100%; /* single button per row on very small screens */
+        min-width: auto;
+      }
+
+      .focus-box {
+        width: 150px;
+        height: 150px;
+      }
+
+      .overlay::after {
+        width: 150px;
+        height: 150px;
+      }
+    }
   </style>
 </head>
 <body>
   <div id="scanner-container">
     <video id="preview"></video>
     <div class="scanner-title">Scan your QR</div>
-    <a class="nav-button" href="/table">📊 View Attendance Table</a>
+
+    <!-- Container for buttons -->
+    <div class="nav-buttons-container">
+      <a class="nav-button" href="/table">📊 View Attendance Table</a>
+      <a class="nav-button" href="/">📝 Register Staff</a>
+    </div>
+
     <div class="overlay"></div>
     <div class="focus-box">
       <div class="scan-line"></div>
@@ -140,39 +208,39 @@
 
   <!-- 📷 Instascan QR Scanner -->
   <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-<script>
-  let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
-  scanner.addListener('scan', function (content) {
-    alert('Scanned: ' + content);
+  <script>
+    let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+    scanner.addListener('scan', function (content) {
+      alert('Scanned: ' + content);
 
-    // ✅ Send scanned QR data to /mark_attendance
-    fetch('/mark_attendance', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ qr_data: content })
-    })
-    .then(res => res.json())
-    .then(data => {
-      alert(data.message); // show server message
+      // ✅ Send scanned QR data to /mark_attendance
+      fetch('/mark_attendance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ qr_data: content })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message); // show server message
 
-      // Optional: Redirect to table after marking attendance
-      window.location.href = "/table";
-    })
-    .catch(err => {
-      console.error(err);
-      alert("❌ Error marking attendance");
+        // Optional: Redirect to table after marking attendance
+        window.location.href = "/table";
+      })
+      .catch(err => {
+        console.error(err);
+        alert("❌ Error marking attendance");
+      });
     });
-  });
 
-  Instascan.Camera.getCameras().then(function (cameras) {
-    if (cameras.length > 0) {
-      scanner.start(cameras[0]);
-    } else {
-      alert('No cameras found.');
-    }
-  }).catch(function (e) {
-    console.error(e);
-  });
-</script>
+    Instascan.Camera.getCameras().then(function (cameras) {
+      if (cameras.length > 0) {
+        scanner.start(cameras[0]);
+      } else {
+        alert('No cameras found.');
+      }
+    }).catch(function (e) {
+      console.error(e);
+    });
+  </script>
 </body>
 </html>

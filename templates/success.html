@@ -6,8 +6,27 @@
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      padding: 40px;
+      padding: 40px 20px;
       background-color: #f4f4f4;
+      box-sizing: border-box;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin: 0.5em 0 1em;
+      max-width: 320px;
+      word-wrap: break-word;
     }
 
     .image-circle {
@@ -16,17 +35,26 @@
       border-radius: 50%;
       object-fit: cover;
       border: 3px solid #ccc;
-      margin-top: 20px;
+      margin: 20px auto 30px;
+      display: block;
+      max-width: 90vw;
+      max-height: 90vw;
     }
 
     img.qr {
-      margin-top: 20px;
+      margin: 20px auto;
       border: 2px solid #ccc;
       padding: 10px;
       background-color: white;
+      width: 200px;
+      height: 200px;
+      max-width: 90vw;
+      max-height: 90vw;
+      display: block;
     }
 
-    a.button {
+    a.button,
+    a.download-link {
       display: inline-block;
       margin: 15px 10px 0 10px;
       text-decoration: none;
@@ -37,24 +65,55 @@
       font-weight: bold;
       font-size: 16px;
       transition: background-color 0.3s ease;
+      min-width: 130px;
+      box-sizing: border-box;
+      text-align: center;
     }
 
-    a.button:hover {
-      background-color: #2980b9;
-    }
-
-    a.download-link {
-      display: inline-block;
-      margin-top: 20px;
-      text-decoration: none;
-      color: white;
-      background-color: #3498db;
-      padding: 10px 20px;
-      border-radius: 5px;
-    }
-
+    a.button:hover,
     a.download-link:hover {
       background-color: #2980b9;
+    }
+
+    /* Container for buttons */
+    div.buttons-container {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      max-width: 350px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      p {
+        font-size: 1rem;
+        max-width: 90vw;
+      }
+
+      a.button,
+      a.download-link {
+        font-size: 14px;
+        padding: 10px 15px;
+        min-width: unset;
+        flex: 1 1 100%;
+      }
+
+      .image-circle {
+        width: 120px;
+        height: 120px;
+      }
+
+      img.qr {
+        width: 140px;
+        height: 140px;
+      }
     }
   </style>
 </head>
@@ -65,7 +124,7 @@
   <img src="{{ image_path }}" alt="Profile Photo" class="image-circle">
 
   <p>Your QR Code:</p>
-  <img class="qr" src="{{ url_for('static', filename='qr_codes/' + filename) }}" alt="QR Code" width="200" height="200">
+  <img class="qr" src="{{ url_for('static', filename='qr_codes/' + filename) }}" alt="QR Code">
 
   <p>
     <a href="{{ url_for('static', filename='qr_codes/' + filename) }}" download="{{ name }}_qr_code.png" class="download-link">
@@ -74,7 +133,7 @@
   </p>
 
   <!-- Buttons to navigate -->
-  <div>
+  <div class="buttons-container">
     <a href="{{ url_for('home') }}" class="button">Register</a>
     <a href="{{ url_for('scan') }}" class="button">Scanner</a>
     <a href="{{ url_for('table') }}" class="button">Attendance Table</a>

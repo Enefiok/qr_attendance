@@ -8,6 +8,10 @@
             width: 90%;
             margin: 20px auto;
             text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .nav-button {
@@ -18,9 +22,10 @@
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
-            margin: 0 10px;
             text-decoration: none;
             display: inline-block;
+            min-width: 140px;
+            transition: background-color 0.3s ease;
         }
 
         .nav-button:hover {
@@ -31,11 +36,14 @@
             width: 90%;
             margin: 20px auto;
             border-collapse: collapse;
+            table-layout: fixed;
+            word-wrap: break-word;
         }
         th, td {
             padding: 10px 15px;
             border: 1px solid #ccc;
             text-align: center;
+            overflow-wrap: break-word;
         }
         th {
             cursor: pointer;
@@ -43,6 +51,7 @@
         }
         h2 {
             text-align: center;
+            margin-top: 20px;
         }
         .profile-pic {
             width: 60px;
@@ -50,15 +59,52 @@
             border-radius: 50%;
             object-fit: cover;
         }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .nav-buttons-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            table, th, td {
+                font-size: 14px;
+            }
+
+            .profile-pic {
+                width: 45px;
+                height: 45px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-buttons-container {
+                width: 95%;
+            }
+
+            table {
+                width: 95%;
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 8px 10px;
+            }
+
+            .profile-pic {
+                width: 40px;
+                height: 40px;
+            }
+        }
     </style>
 </head>
 <body>
 
-<!-- Navigation Buttons -->
-<div class="nav-buttons-container">
+<!-- Navigation Buttons inside a form -->
+<form class="nav-buttons-container" action="#" method="GET">
     <a href="/scan" class="nav-button">📷 Go to Scanner</a>
     <a href="/" class="nav-button">📝 Go to Register</a>
-</div>
+</form>
 
 <h2>Scanned Users</h2>
 
