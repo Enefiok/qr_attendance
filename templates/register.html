@@ -78,6 +78,39 @@
     .center {
       text-align: center;
     }
+
+    /* Container for the two extra buttons */
+    .nav-buttons {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .nav-buttons a {
+      text-decoration: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      margin: 0 10px;
+      display: inline-block;
+      font-weight: bold;
+    }
+
+    .nav-buttons a.table-btn {
+      background-color: #3498db;
+    }
+
+    .nav-buttons a.table-btn:hover {
+      background-color: #2980b9;
+    }
+
+    .nav-buttons a.scanner-btn {
+      background-color: #27ae60;
+    }
+
+    .nav-buttons a.scanner-btn:hover {
+      background-color: #1e8449;
+    }
+
   </style>
 </head>
 <body>
@@ -100,6 +133,12 @@
 
     <button type="submit">Register</button>
   </form>
+
+  <!-- Navigation Buttons -->
+  <div class="nav-buttons">
+    <a href="{{ url_for('table') }}" class="table-btn">View Attendance Table</a>
+    <a href="{{ url_for('scan') }}" class="scanner-btn">Go to Scanner</a>
+  </div>
 
   <script>
     function previewImage(event) {
